@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login/Signup</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1>Login/Signup</h1>
+  <form method="POST" action="/authenticate">
+    <label>Username:</label>
+    <input type="text" name="username" required>
+    <label>Password:</label>
+    <input type="password" name="password" required>
+    <button type="submit" name="action" value="login">Login</button>
+    <button type="submit" name="action" value="signup">Signup</button>
+  </form>
+  {% if error %}
+  <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</body>
+<video id="bg-video" autoplay muted loop>
+    <source src="/static/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+  
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Generator</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>MCQ Generator</h1>
+    <form id="mcqForm" enctype="multipart/form-data">
+      <label for="document">Upload Document:</label>
+      <input type="file" id="document" name="document" accept=".pdf,.docx" required>
+
+      <label for="numQuestions">Enter Number of MCQs:</label>
+      <input type="number" id="numQuestions" name="numQuestions" min="1" required>
+
+      <label for="difficulty">Difficulty Level:</label>
+      <select id="difficulty" name="difficulty" required>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+
+      <button type="submit">Generate MCQs</button>
+    </form>
+
+    <div id="mcqContainer"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('mcqForm');
+    const mcqContainer = document.getElementById('mcqContainer');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      mcqContainer.innerHTML = '<p>Generating MCQs, please wait...</p>';
+
+      const response = await fetch('/generate_mcqs', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        mcqContainer.innerHTML = '';
+        data.mcqs.forEach((mcq, index) => {
+          const mcqDiv = document.createElement('div');
+          mcqDiv.classList.add('mcq');
+          mcqDiv.innerHTML = `
+            <h4>${index + 1}. ${mcq.question}</h4>
+            <div class="options">
+              ${mcq.options
+                .map(
+                  (option, i) => `
+                <button onclick="checkAnswer(this, ${mcq.correctOption === i})">
+                  ${String.fromCharCode(65 + i)}. ${option}
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+            <div class="feedback"></div>
+          `;
+          mcqContainer.appendChild(mcqDiv);
+        });
+      } else {
+        mcqContainer.innerHTML = '<p>Error generating MCQs. Please try again.</p>';
+      }
+    });
+
+    function checkAnswer(button, isCorrect) {
+      const feedback = button.parentNode.nextElementSibling;
+      feedback.style.display = 'block';
+
+      if (isCorrect) {
+        feedback.textContent = 'Correct!';
+        feedback.style.color = 'green';
+      } else {
+        feedback.textContent = 'Incorrect!';
+        feedback.style.color = 'red';
+      }
+    }
+  </script>
+</body>
+</html>

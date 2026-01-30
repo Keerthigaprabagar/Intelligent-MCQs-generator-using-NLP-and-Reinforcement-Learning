@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1>Generate MCQs</h1>
+  <form action="/generate" method="POST" enctype="multipart/form-data">
+    <label>Upload Document:</label>
+    <input type="file" name="document" required>
+    <label>Number of MCQs:</label>
+    <input type="number" name="numQuestions" min="1" required>
+    <label>Difficulty:</label>
+    <select name="difficulty" required>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <button type="submit">Generate</button>
+  </form>
+</body>
+<video id="bg-video" autoplay muted loop>
+    <source src="/static/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+  
+</html>

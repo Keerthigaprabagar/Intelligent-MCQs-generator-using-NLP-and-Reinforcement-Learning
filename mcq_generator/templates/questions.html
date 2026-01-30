@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQs</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Answer the questions</h1>
+    <form action="{{ url_for('submit_answers') }}" method="POST">
+        {% for i, mcq in enumerate(mcqs) %}
+            <fieldset>
+                <legend>{{ mcq.question }}</legend>
+                {% for j, option in enumerate(mcq.options) %}
+                    <label>
+                        <input type="radio" name="answer_{{ i }}" value="{{ j }}" required>
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+            </fieldset>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+
+    <video id="bg-video" autoplay muted loop>
+        <source src="/static/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</body>
+</html>
